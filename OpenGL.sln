@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ep_08_shaders", "ep_08_shad
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ep_09_index_buffers", "ep_09_index_buffers\ep_09_index_buffers.vcxproj", "{EA6BDF06-3986-45DA-8E8A-7DF4AF342EAA}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ep_10_error_handling", "ep_10_error_handling\ep_10_error_handling.vcxproj", "{1ECFE0DC-E161-438E-853B-8F365D3E26E6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -41,6 +43,14 @@ Global
 		{EA6BDF06-3986-45DA-8E8A-7DF4AF342EAA}.Release|x64.Build.0 = Release|x64
 		{EA6BDF06-3986-45DA-8E8A-7DF4AF342EAA}.Release|x86.ActiveCfg = Release|Win32
 		{EA6BDF06-3986-45DA-8E8A-7DF4AF342EAA}.Release|x86.Build.0 = Release|Win32
+		{1ECFE0DC-E161-438E-853B-8F365D3E26E6}.Debug|x64.ActiveCfg = Debug|x64
+		{1ECFE0DC-E161-438E-853B-8F365D3E26E6}.Debug|x64.Build.0 = Debug|x64
+		{1ECFE0DC-E161-438E-853B-8F365D3E26E6}.Debug|x86.ActiveCfg = Debug|Win32
+		{1ECFE0DC-E161-438E-853B-8F365D3E26E6}.Debug|x86.Build.0 = Debug|Win32
+		{1ECFE0DC-E161-438E-853B-8F365D3E26E6}.Release|x64.ActiveCfg = Release|x64
+		{1ECFE0DC-E161-438E-853B-8F365D3E26E6}.Release|x64.Build.0 = Release|x64
+		{1ECFE0DC-E161-438E-853B-8F365D3E26E6}.Release|x86.ActiveCfg = Release|Win32
+		{1ECFE0DC-E161-438E-853B-8F365D3E26E6}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,7 +1,7 @@
-// Include GLEW
+// Include GLEW before glfw.
 #include <GL/glew.h>
 
-// Include GLFW
+// Include GLFW.
 #include <GLFW/glfw3.h>
 
 #include <iostream>
@@ -52,7 +52,7 @@ static unsigned int CompileShader( unsigned int type, const std::string& source 
 	glShaderSource( id, 1, &src, nullptr );
 	glCompileShader( id );
 
-	// Error handling
+	// Error handling.
 	int result;
 	glGetShaderiv( id, GL_COMPILE_STATUS, &result );
 	std::cout << ( type == GL_VERTEX_SHADER ? "vertex" : "fragment" ) << " shader compile status: " << result << std::endl;
@@ -77,7 +77,7 @@ static unsigned int CompileShader( unsigned int type, const std::string& source 
 
 static unsigned int CreateShader( const std::string& vertexShader, const std::string& fragmentShader )
 {
-	// Create a shader program
+	// Create a shader program.
 	unsigned int program = glCreateProgram();
 	unsigned int vs = CompileShader( GL_VERTEX_SHADER, vertexShader );
 	unsigned int fs = CompileShader( GL_FRAGMENT_SHADER, fragmentShader );

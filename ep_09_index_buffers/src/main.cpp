@@ -1,7 +1,7 @@
-// Include GLEW
+// Include GLEW before glfw.
 #include <GL/glew.h>
 
-// Include GLFW
+// Include GLFW.
 #include <GLFW/glfw3.h>
 
 #include <iostream>
@@ -52,7 +52,7 @@ static unsigned int CompileShader( unsigned int type, const std::string& source 
 	glShaderSource( id, 1, &src, nullptr );
 	glCompileShader( id );
 
-	// Error handling
+	// Error handling.
 	int result;
 	glGetShaderiv( id, GL_COMPILE_STATUS, &result );
 	std::cout << ( type == GL_VERTEX_SHADER ? "vertex" : "fragment" ) << " shader compile status: " << result << std::endl;
@@ -146,19 +146,25 @@ int main( void )
 
 	/*glClearColor( 0.0f, 0.0f, 0.4f, 0.0f ); // Set background color. */
 
-	float positions[6] = {
-		-0.5f, -0.5f,
-		 0.0f,  0.5f,
-		 0.5f, -0.5f
+	float positions[] = {
+		-0.5f, -0.5f, // 0
+		 0.5f, -0.5f, // 1
+		 0.5f,  0.5f, // 2
+		-0.5f,  0.5f  // 3
 	};
 
-	// Create buffer and copy data
-	/*GLuint*/unsigned int buffer;
+	unsigned int indices[] = {
+	  0, 1, 2,
+	  2, 3, 0
+	};
+
+	// Create buffer and copy data.
+	unsigned int buffer;
 	glGenBuffers( 1, &buffer );
 	glBindBuffer( GL_ARRAY_BUFFER, buffer );
-	glBufferData( GL_ARRAY_BUFFER, 6 * sizeof( float ), positions, GL_STATIC_DRAW );
+	glBufferData( GL_ARRAY_BUFFER, 4 * 2 * sizeof( float ), positions, GL_STATIC_DRAW );
 
-	// define vertex layout
+	// Define vertex layout.
 	glVertexAttribPointer( 0, // Index of attrib. layout(location = 0) in shaders.
 						   2, // size of the current attribute values (1-4) not bytes.
 						   GL_FLOAT, // Type of the attribute values.
@@ -166,6 +172,12 @@ int main( void )
 						   2 * sizeof( float ), // stride: distance in bytes between 2 vertex.
 						   0 ); // offset: distance in bytes of the current attribute from the begining of a vertex.
 	glEnableVertexAttribArray( 0 );
+
+	// Create index buffer.
+	unsigned int ibo; // Index buffer object.
+	glGenBuffers( 1, &ibo );
+	glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, ibo );
+	glBufferData( GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof( unsigned int ), indices, GL_STATIC_DRAW );
 
 	ShaderProgramSource source = ParseShader( "res/shaders/Basic.shader" );
 
@@ -182,8 +194,7 @@ int main( void )
 		/* Render here */
 		glClear( GL_COLOR_BUFFER_BIT ); // Clear the screen.
 
-		// Draw the triangle !
-		glDrawArrays( GL_TRIANGLES, 0, 3 );
+		glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr );
 
 		/* Swap front and back buffers */
 		glfwSwapBuffers( window );

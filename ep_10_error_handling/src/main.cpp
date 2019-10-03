@@ -9,7 +9,7 @@
 #include <string>
 #include <sstream>
 
-#define ASSERT(x) if (!(x)) __debugbreak();
+#define ASSERT(x) if (!(x)) __debugbreak()
 
 #define GLCall(x) GLClearError();\
 	x;\
@@ -99,28 +99,28 @@ static struct ShaderProgramSource ParseShader( const std::string& filepath )
 
 static unsigned int CompileShader( unsigned int type, const std::string& source )
 {
-	unsigned int id = glCreateShader( type );
+	GLCall( unsigned int id = glCreateShader( type ) );
 	const char* src = source.c_str();
-	glShaderSource( id, 1, &src, nullptr );
-	glCompileShader( id );
+	GLCall( glShaderSource( id, 1, &src, nullptr ) );
+	GLCall( glCompileShader( id ) );
 
 	// Error handling.
 	int result;
-	glGetShaderiv( id, GL_COMPILE_STATUS, &result );
+	GLCall( glGetShaderiv( id, GL_COMPILE_STATUS, &result ) );
 	std::cout << ( type == GL_VERTEX_SHADER ? "vertex" : "fragment" ) << " shader compile status: " << result << std::endl;
 	if ( result == GL_FALSE )
 	{
 		int length;
-		glGetShaderiv( id, GL_INFO_LOG_LENGTH, &length );
+		GLCall( glGetShaderiv( id, GL_INFO_LOG_LENGTH, &length ) );
 		char* message = (char*) alloca( length * sizeof( char ) );
-		glGetShaderInfoLog( id, length, &length, message );
+		GLCall( glGetShaderInfoLog( id, length, &length, message ) );
 		std::cout
 			<< "Failed to compile "
 			<< ( type == GL_VERTEX_SHADER ? "vertex" : "fragment" )
 			<< "shader"
 			<< std::endl;
 		std::cout << message << std::endl;
-		glDeleteShader( id );
+		GLCall( glDeleteShader( id ) );
 		return 0;
 	}
 
@@ -130,32 +130,32 @@ static unsigned int CompileShader( unsigned int type, const std::string& source 
 static unsigned int CreateShader( const std::string& vertexShader, const std::string& fragmentShader )
 {
 	// Create a shader program
-	unsigned int program = glCreateProgram();
-	unsigned int vs = CompileShader( GL_VERTEX_SHADER, vertexShader );
-	unsigned int fs = CompileShader( GL_FRAGMENT_SHADER, fragmentShader );
+	GLCall( unsigned int program = glCreateProgram() );
+	GLCall( unsigned int vs = CompileShader( GL_VERTEX_SHADER, vertexShader ) );
+	GLCall( unsigned int fs = CompileShader( GL_FRAGMENT_SHADER, fragmentShader ) );
 
-	glAttachShader( program, vs );
-	glAttachShader( program, fs );
+	GLCall( glAttachShader( program, vs ) );
+	GLCall( glAttachShader( program, fs ) );
 
-	glLinkProgram( program );
+	GLCall( glLinkProgram( program ) );
 
 	GLint program_linked;
 
-	glGetProgramiv( program, GL_LINK_STATUS, &program_linked );
+	GLCall( glGetProgramiv( program, GL_LINK_STATUS, &program_linked ) );
 	std::cout << "Program link status: " << program_linked << std::endl;
 	if ( program_linked != GL_TRUE )
 	{
 		GLsizei log_length = 0;
 		GLchar message[1024];
-		glGetProgramInfoLog( program, 1024, &log_length, message );
+		GLCall( glGetProgramInfoLog( program, 1024, &log_length, message ) );
 		std::cout << "Failed to link program" << std::endl;
 		std::cout << message << std::endl;
 	}
 
-	glValidateProgram( program );
+	GLCall( glValidateProgram( program ) );
 
-	glDeleteShader( vs );
-	glDeleteShader( fs );
+	GLCall( glDeleteShader( vs ) );
+	GLCall( glDeleteShader( fs ) );
 
 	return program;
 }
@@ -212,24 +212,24 @@ int main( void )
 
 	// Create buffer and copy data.
 	unsigned int buffer;
-	glGenBuffers( 1, &buffer );
-	glBindBuffer( GL_ARRAY_BUFFER, buffer );
-	glBufferData( GL_ARRAY_BUFFER, 4 * 2 * sizeof( float ), positions, GL_STATIC_DRAW );
+	GLCall( glGenBuffers( 1, &buffer ) );
+	GLCall( glBindBuffer( GL_ARRAY_BUFFER, buffer ) );
+	GLCall( glBufferData( GL_ARRAY_BUFFER, 4 * 2 * sizeof( float ), positions, GL_STATIC_DRAW ) );
 
 	// Define vertex layout.
-	glVertexAttribPointer( 0, // Index of attrib. layout(location = 0) in shaders.
-						   2, // size of the current attribute values (1-4) not bytes.
-						   GL_FLOAT, // Type of the attribute values.
-						   GL_FALSE, // Normalize? (0-255 -> 0-1).
-						   2 * sizeof( float ), // stride: distance in bytes between 2 vertex.
-						   0 ); // offset: distance in bytes of the current attribute from the begining of a vertex.
-	glEnableVertexAttribArray( 0 );
+	GLCall( glVertexAttribPointer( 0, // Index of attrib. layout(location = 0) in shaders.
+								   2, // size of the current attribute values (1-4) not bytes.
+								   GL_FLOAT, // Type of the attribute values.
+								   GL_FALSE, // Normalize? (0-255 -> 0-1).
+								   2 * sizeof( float ), // stride: distance in bytes between 2 vertex.
+								   0 ) ); // offset: distance in bytes of the current attribute from the begining of a vertex.
+	GLCall( glEnableVertexAttribArray( 0 ) );
 
 	// Create index buffer.
 	unsigned int ibo; // Index buffer object.
-	glGenBuffers( 1, &ibo );
-	glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, ibo );
-	glBufferData( GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof( unsigned int ), indices, GL_STATIC_DRAW );
+	GLCall( glGenBuffers( 1, &ibo ) );
+	GLCall( glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, ibo ) );
+	GLCall( glBufferData( GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof( unsigned int ), indices, GL_STATIC_DRAW ) );
 
 	ShaderProgramSource source = ParseShader( "res/shaders/Basic.shader" );
 
@@ -237,16 +237,16 @@ int main( void )
 	std::cout << "FRAGMENT" << std::endl << source.FragmentSource << std::endl;
 
 	unsigned int shader = CreateShader( source.VertexSource, source.FragmentSource );
-	glUseProgram( shader );
+	GLCall( glUseProgram( shader ) );
 
 	/* Loop until the user closes the window */
 	while ( !glfwWindowShouldClose( window )
 			&& ( glfwGetKey( window, GLFW_KEY_ESCAPE ) != GLFW_PRESS ) )
 	{
 		/* Render here */
-		glClear( GL_COLOR_BUFFER_BIT ); // Clear the screen.
+		GLCall( glClear( GL_COLOR_BUFFER_BIT ) ); // Clear the screen.
 
-		GLCall(glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr ))
+		GLCall( glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr ) );
 
 		/* Swap front and back buffers */
 		glfwSwapBuffers( window );
@@ -256,8 +256,8 @@ int main( void )
 	}
 
 	// Cleanup VBO.
-	glDeleteBuffers( 1, &buffer );
-	glDeleteProgram( shader );
+	GLCall( glDeleteBuffers( 1, &buffer ) );
+	GLCall( glDeleteProgram( shader ) );
 
 	// Close OpenGL window and terminate GLFW.
 	glfwTerminate();

@@ -170,6 +170,10 @@ int main( void )
 		return -1;
 	}
 
+	glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 3 );
+	glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 3 );
+	glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE );
+
 	// Open a window and create its OpenGL context.
 	GLFWwindow* window = glfwCreateWindow( 1024, 768, "OpenGL Tutorial - Vertex arrays", NULL, NULL );
 	if ( window == NULL )
@@ -210,6 +214,11 @@ int main( void )
 	  2, 3, 0
 	};
 
+	// Have to set VAO before binding attrbutes.
+	unsigned int vao;
+	GLCall( glGenVertexArrays( 1, &vao ) );
+	GLCall( glBindVertexArray( vao ) );
+
 	// Create buffer and copy data.
 	unsigned int buffer;
 	GLCall( glGenBuffers( 1, &buffer ) );
@@ -245,6 +254,12 @@ int main( void )
 	float red = 0.0f;
 	float step = 0.05f;
 
+	// Unbind shader, vbo and ibo.
+	GLCall( glUseProgram( 0 ) );
+	GLCall( glBindBuffer( GL_ARRAY_BUFFER, 0 ) );
+	GLCall( glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 ) );
+	GLCall( glBindVertexArray( 0 ) );
+
 	/* Loop until the user closes the window */
 	while ( !glfwWindowShouldClose( window )
 			&& ( glfwGetKey( window, GLFW_KEY_ESCAPE ) != GLFW_PRESS ) )
@@ -253,23 +268,30 @@ int main( void )
 		if ( red < 0.0f || red > 1.0f ) step *= -1.0;
 		red += step;
 
-		/* Render here */
 		GLCall( glClear( GL_COLOR_BUFFER_BIT ) ); // Clear the screen.
 
-		 // Set uniform color, before drawing.
-		GLCall( glUniform4f( u_Color, red, 0.3, 0.8, 1.0 ) );
+		GLCall( glUseProgram( shader ) );
+		GLCall( glUniform4f( u_Color, red, 0.3, 0.8, 1.0 ) );// Set uniform color, before drawing.
+
+		// Bind vertex buffer and attribute layout.
+		// GLCall( glBindBuffer(GL_ARRAY_BUFFER, buffer) );
+		// GLCall( glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0) );
+		// GLCall( glEnableVertexAttribArray(0) );
+
+		// Instead of binding vertex buffer, attrib pointer, just bind Vertex Array Object.
+		GLCall( glBindVertexArray( vao ) );
+		// Bind index buffer.
+		GLCall( glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, ibo ) );
 
 		GLCall( glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr ) );
 
-		/* Swap front and back buffers */
-		glfwSwapBuffers( window );
-
-		/* Poll for and process events */
-		glfwPollEvents();
+		glfwSwapBuffers( window ); // Swap front and back buffers.
+		glfwPollEvents(); // Poll for and process events.
 	}
 
 	// Cleanup VBO.
 	GLCall( glDeleteBuffers( 1, &buffer ) );
+	GLCall( glDeleteVertexArrays( 1, &vao ) );
 	GLCall( glDeleteProgram( shader ) );
 
 	// Close OpenGL window and terminate GLFW.

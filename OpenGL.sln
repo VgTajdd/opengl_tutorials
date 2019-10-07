@@ -17,6 +17,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ep_12_vertex_arrays", "ep_1
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ep_13_opengl_abstraction", "ep_13_opengl_abstraction\ep_13_opengl_abstraction.vcxproj", "{0BB95A17-F982-43AD-9181-AF718EC79359}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ep_14_buffer_layout_abstraction", "ep_14_buffer_layout_abstraction\ep_14_buffer_layout_abstraction.vcxproj", "{2F6ABAD1-7269-4801-A6FC-495AE3BD4907}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -81,6 +83,14 @@ Global
 		{0BB95A17-F982-43AD-9181-AF718EC79359}.Release|x64.Build.0 = Release|x64
 		{0BB95A17-F982-43AD-9181-AF718EC79359}.Release|x86.ActiveCfg = Release|Win32
 		{0BB95A17-F982-43AD-9181-AF718EC79359}.Release|x86.Build.0 = Release|Win32
+		{2F6ABAD1-7269-4801-A6FC-495AE3BD4907}.Debug|x64.ActiveCfg = Debug|x64
+		{2F6ABAD1-7269-4801-A6FC-495AE3BD4907}.Debug|x64.Build.0 = Debug|x64
+		{2F6ABAD1-7269-4801-A6FC-495AE3BD4907}.Debug|x86.ActiveCfg = Debug|Win32
+		{2F6ABAD1-7269-4801-A6FC-495AE3BD4907}.Debug|x86.Build.0 = Debug|Win32
+		{2F6ABAD1-7269-4801-A6FC-495AE3BD4907}.Release|x64.ActiveCfg = Release|x64
+		{2F6ABAD1-7269-4801-A6FC-495AE3BD4907}.Release|x64.Build.0 = Release|x64
+		{2F6ABAD1-7269-4801-A6FC-495AE3BD4907}.Release|x86.ActiveCfg = Release|Win32
+		{2F6ABAD1-7269-4801-A6FC-495AE3BD4907}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

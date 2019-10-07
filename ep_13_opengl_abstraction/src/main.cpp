@@ -9,57 +9,9 @@
 #include <string>
 #include <sstream>
 
-#define ASSERT(x) if (!(x)) __debugbreak()
-
-#define GLCall(x) GLClearError();\
-	x;\
-	ASSERT(GLLogCall(#x, __FILE__, __LINE__))
-
-static void GLClearError()
-{
-	while ( glGetError() != GL_NO_ERROR );
-}
-
-static const char* GLCheckError( const GLenum error )
-{
-	switch ( error )
-	{
-		case GL_INVALID_ENUM:
-			return "GL_INVALID_ENUM : An unacceptable value is specified for an enumerated argument.";
-			break;
-		case GL_INVALID_VALUE:
-			return "GL_INVALID_OPERATION : A numeric argument is out of range.";
-			break;
-		case GL_INVALID_OPERATION:
-			return "GL_INVALID_OPERATION : The specified operation is not allowed in the current state.";
-			break;
-		case GL_INVALID_FRAMEBUFFER_OPERATION:
-			return "GL_INVALID_FRAMEBUFFER_OPERATION : The framebuffer object is not complete.";
-			break;
-		case GL_OUT_OF_MEMORY:
-			return "GL_OUT_OF_MEMORY : There is not enough memory left to execute the command.";
-			break;
-		case GL_STACK_UNDERFLOW:
-			return "GL_STACK_UNDERFLOW : An attempt has been made to perform an operation that would cause an internal stack to underflow.";
-			break;
-		case GL_STACK_OVERFLOW:
-			return "GL_STACK_OVERFLOW : An attempt has been made to perform an operation that would cause an internal stack to overflow.";
-			break;
-		default:
-			return "Unrecognized error.";
-	}
-}
-
-static bool GLLogCall( const char* function, const char* file, int line )
-{
-	while ( GLenum error = glGetError() )
-	{
-		std::cout << "[OpenGL Error] (" << error << "): " << function
-			<< " " << file << "(line " << line << "): " << GLCheckError( error ) << std::endl;
-		return false;
-	}
-	return true;
-}
+#include "Renderer.h"
+#include "VertexBuffer.h"
+#include "IndexBuffer.h"
 
 struct ShaderProgramSource
 {
@@ -220,10 +172,7 @@ int main( void )
 	GLCall( glBindVertexArray( vao ) );
 
 	// Create buffer and copy data.
-	unsigned int buffer;
-	GLCall( glGenBuffers( 1, &buffer ) );
-	GLCall( glBindBuffer( GL_ARRAY_BUFFER, buffer ) );
-	GLCall( glBufferData( GL_ARRAY_BUFFER, 4 * 2 * sizeof( float ), positions, GL_STATIC_DRAW ) );
+	VertexBuffer vb( positions, 4 * 2 * sizeof( float ) );
 
 	// Define vertex layout.
 	GLCall( glVertexAttribPointer( 0, // Index of attrib. layout(location = 0) in shaders.
@@ -234,11 +183,8 @@ int main( void )
 								   0 ) ); // offset: distance in bytes of the current attribute from the begining of a vertex.
 	GLCall( glEnableVertexAttribArray( 0 ) );
 
-	// Create index buffer.
-	unsigned int ibo; // Index buffer object.
-	GLCall( glGenBuffers( 1, &ibo ) );
-	GLCall( glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, ibo ) );
-	GLCall( glBufferData( GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof( unsigned int ), indices, GL_STATIC_DRAW ) );
+	// Create index buffer
+	IndexBuffer ib( indices, 6 );
 
 	ShaderProgramSource source = ParseShader( "res/shaders/Basic.shader" );
 
@@ -273,15 +219,11 @@ int main( void )
 		GLCall( glUseProgram( shader ) );
 		GLCall( glUniform4f( u_Color, red, 0.3, 0.8, 1.0 ) );// Set uniform color, before drawing.
 
-		// Bind vertex buffer and attribute layout.
-		// GLCall( glBindBuffer(GL_ARRAY_BUFFER, buffer) );
-		// GLCall( glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0) );
-		// GLCall( glEnableVertexAttribArray(0) );
-
 		// Instead of binding vertex buffer, attrib pointer, just bind Vertex Array Object.
 		GLCall( glBindVertexArray( vao ) );
+
 		// Bind index buffer.
-		GLCall( glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, ibo ) );
+		ib.Bind();
 
 		GLCall( glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr ) );
 
@@ -290,7 +232,6 @@ int main( void )
 	}
 
 	// Cleanup VBO.
-	GLCall( glDeleteBuffers( 1, &buffer ) );
 	GLCall( glDeleteVertexArrays( 1, &vao ) );
 	GLCall( glDeleteProgram( shader ) );
 

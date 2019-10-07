@@ -12,6 +12,7 @@
 #include "Renderer.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
+#include "VertexArray.h"
 
 struct ShaderProgramSource
 {
@@ -166,25 +167,14 @@ int main( void )
 	  2, 3, 0
 	};
 
-	// Have to set VAO before binding attrbutes.
-	unsigned int vao;
-	GLCall( glGenVertexArrays( 1, &vao ) );
-	GLCall( glBindVertexArray( vao ) );
+	VertexArray va;											// Have to set VAO before binding attrbutes.
+	VertexBuffer vb( positions, 4 * 2 * sizeof( float ) );	// Create buffer and copy data.
+	IndexBuffer ib( indices, 6 );							// Create index buffer.
 
-	// Create buffer and copy data.
-	VertexBuffer vb( positions, 4 * 2 * sizeof( float ) );
+	VertexBufferLayout layout;
+	layout.AddFloat( 2 );
 
-	// Define vertex layout.
-	GLCall( glVertexAttribPointer( 0, // Index of attrib. layout(location = 0) in shaders.
-								   2, // size of the current attribute values (1-4) not bytes.
-								   GL_FLOAT, // Type of the attribute values.
-								   GL_FALSE, // Normalize? (0-255 -> 0-1).
-								   2 * sizeof( float ), // stride: distance in bytes between 2 vertex.
-								   0 ) ); // offset: distance in bytes of the current attribute from the begining of a vertex.
-	GLCall( glEnableVertexAttribArray( 0 ) );
-
-	// Create index buffer
-	IndexBuffer ib( indices, 6 );
+	va.AddBuffer( vb, layout );
 
 	ShaderProgramSource source = ParseShader( "res/shaders/Basic.shader" );
 
@@ -217,10 +207,10 @@ int main( void )
 		GLCall( glClear( GL_COLOR_BUFFER_BIT ) ); // Clear the screen.
 
 		GLCall( glUseProgram( shader ) );
-		GLCall( glUniform4f( u_Color, red, 0.3, 0.8, 1.0 ) );// Set uniform color, before drawing.
+		GLCall( glUniform4f( u_Color, red, 0.3f, 0.8f, 1.0f ) );// Set uniform color, before drawing.
 
 		// Instead of binding vertex buffer, attrib pointer, just bind Vertex Array Object.
-		GLCall( glBindVertexArray( vao ) );
+		va.Bind();
 
 		// Bind index buffer.
 		ib.Bind();
@@ -231,8 +221,7 @@ int main( void )
 		glfwPollEvents(); // Poll for and process events.
 	}
 
-	// Cleanup VBO.
-	GLCall( glDeleteVertexArrays( 1, &vao ) );
+	// Cleanup.
 	GLCall( glDeleteProgram( shader ) );
 
 	// Close OpenGL window and terminate GLFW.

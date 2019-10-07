@@ -219,7 +219,7 @@ int main( void )
 	GLCall( glGenVertexArrays( 1, &vao ) );
 	GLCall( glBindVertexArray( vao ) );
 
-	// Create buffer and copy data.
+	// Create buffer and copy data (vbo).
 	unsigned int buffer;
 	GLCall( glGenBuffers( 1, &buffer ) );
 	GLCall( glBindBuffer( GL_ARRAY_BUFFER, buffer ) );
@@ -291,6 +291,7 @@ int main( void )
 
 	// Cleanup VBO.
 	GLCall( glDeleteBuffers( 1, &buffer ) );
+	GLCall( glDeleteBuffers( 1, &ibo ) );
 	GLCall( glDeleteVertexArrays( 1, &vao ) );
 	GLCall( glDeleteProgram( shader ) );
 

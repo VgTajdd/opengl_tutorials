@@ -172,7 +172,7 @@ int main( void )
 	IndexBuffer ib( indices, 6 );							// Create index buffer.
 
 	VertexBufferLayout layout;
-	layout.AddFloat( 2 );
+	layout.Push< float >( 2 );
 
 	va.AddBuffer( vb, layout );
 

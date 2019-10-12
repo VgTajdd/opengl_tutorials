@@ -93,7 +93,7 @@ int main( void )
 		GLCall( glClear( GL_COLOR_BUFFER_BIT ) ); // Clear the screen.
 
 		shader.Bind();
-		shader.SetUniform4f( "u_Color", red, 0.3, 0.8, 1.0 ); // Set uniform color, before drawing.
+		shader.SetUniform4f( "u_Color", red, 0.3f, 0.8f, 1.0f ); // Set uniform color, before drawing.
 
 		// Instead of binding vertex buffer, attrib pointer, just bind Vertex Array Object.
 		va.Bind();

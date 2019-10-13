@@ -11,7 +11,7 @@
 #include "IndexBuffer.h"
 #include "VertexArray.h"
 #include "Shader.h"
-//#include "Debug.h"
+#include "Texture.h"
 
 GLFWwindow* initWindow()
 {
@@ -59,10 +59,10 @@ int main( void )
 	}
 
 	float positions[] = {
-		-0.5f, -0.5f, // 0
-		 0.5f, -0.5f, // 1
-		 0.5f,  0.5f, // 2
-		-0.5f,  0.5f  // 3
+		-0.5f, -0.5f, 0.0f, 0.0f, // 0
+		 0.5f, -0.5f, 1.0f, 0.0f, // 1
+		 0.5f,  0.5f, 1.0f, 1.0f, // 2
+		-0.5f,  0.5f, 0.0f, 1.0f  // 3
 	};
 
 	unsigned int indices[] = {
@@ -70,12 +70,16 @@ int main( void )
 		2, 3, 0
 	};
 
+	GLCall( glEnable( GL_BLEND ) );
+	GLCall( glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA ) );
+
 	{
 		VertexArray va;											// Have to set VAO before binding attrbutes.
-		VertexBuffer vb( positions, 4 * 2 * sizeof( float ) );	// Create buffer and copy data.
+		VertexBuffer vb( positions, 4 * 4 * sizeof( float ) );	// Create buffer and copy data.
 		IndexBuffer ib( indices, 6 );							// Create index buffer.
 
 		VertexBufferLayout layout;
+		layout.Push< float >( 2 );
 		layout.Push< float >( 2 );
 
 		va.AddBuffer( vb, layout );
@@ -83,10 +87,9 @@ int main( void )
 		Shader shader( "res/shaders/Basic.shader" );
 		shader.Bind();
 
-		float red = 0.0f;
-		float step = 0.05f;
-
-		Renderer renderer;
+		Texture texture( "res/textures/phone.png" );
+		texture.Bind();
+		shader.SetUniform1i( "u_Texture", 0 );
 
 		// Unbind shader, vbo and ibo.
 		va.Unbind();
@@ -94,18 +97,13 @@ int main( void )
 		ib.Unbind();
 		shader.Unbind();
 
+		Renderer renderer;
+
 		/* Loop until the user closes the window */
 		while ( !glfwWindowShouldClose( window )
 				&& ( glfwGetKey( window, GLFW_KEY_ESCAPE ) != GLFW_PRESS ) )
 		{
-			if ( red < 0.0f || red > 1.0f ) step *= -1.0;
-			red += step; // Increment red.
-
 			renderer.Clear();
-
-			shader.Bind();
-			shader.SetUniform4f( "u_Color", red, 0.3f, 0.8f, 1.0f ); // Set uniform color, before drawing.
-
 			renderer.Draw( va, ib, shader );
 
 			glfwSwapBuffers( window ); // Swap front and back buffers.

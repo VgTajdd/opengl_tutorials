@@ -26,7 +26,7 @@ GLFWwindow* initWindow()
 	glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE );
 
 	// Open a window and create its OpenGL context.
-	GLFWwindow* window = glfwCreateWindow( 1024, 768, "OpenGL Tutorial - Shader abstraction", nullptr, nullptr );
+	GLFWwindow* window = glfwCreateWindow( 1024, 768, "OpenGL Tutorial - Renderer", nullptr, nullptr );
 	if ( window == nullptr )
 	{
 		return nullptr;

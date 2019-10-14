@@ -13,6 +13,9 @@
 #include "Shader.h"
 #include "Texture.h"
 
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+
 GLFWwindow* initWindow()
 {
 	// Initialize GLFW.
@@ -26,7 +29,7 @@ GLFWwindow* initWindow()
 	glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE );
 
 	// Open a window and create its OpenGL context.
-	GLFWwindow* window = glfwCreateWindow( 1024, 768, "OpenGL Tutorial - Textures", nullptr, nullptr );
+	GLFWwindow* window = glfwCreateWindow( 1024, 768, "OpenGL Tutorial - Math", nullptr, nullptr );
 	if ( window == nullptr )
 	{
 		return nullptr;
@@ -78,6 +81,8 @@ int main( void )
 		VertexBuffer vb( positions, 4 * 4 * sizeof( float ) );	// Create buffer and copy data.
 		IndexBuffer ib( indices, 6 );							// Create index buffer.
 
+		glm::mat4 proj = glm::ortho( -2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f );
+
 		VertexBufferLayout layout;
 		layout.Push< float >( 2 );
 		layout.Push< float >( 2 );
@@ -90,6 +95,7 @@ int main( void )
 		Texture texture( "res/textures/phone.png" );
 		texture.Bind();
 		shader.SetUniform1i( "u_Texture", 0 );
+		shader.SetUniformMat4f( "u_MVP", proj );
 
 		// Unbind shader, vbo and ibo.
 		va.Unbind();

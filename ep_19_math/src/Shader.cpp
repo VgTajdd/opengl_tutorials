@@ -64,6 +64,11 @@ void Shader::SetUniform4f( const std::string& name, float f0, float f1, float f2
 	GLCall( glUniform4f( GetUniformLocation( name ), f0, f1, f2, f3 ) );
 }
 
+void Shader::SetUniformMat4f( const std::string& name, const glm::mat4& mat4f )
+{
+	GLCall( glUniformMatrix4fv( GetUniformLocation( name ), 1, GL_FALSE, &mat4f[0][0] ) );
+}
+
 struct ShaderProgramSource Shader::ParseShader( const std::string& filepath )
 {
 	enum class ShaderType

@@ -27,7 +27,7 @@ namespace test
 		m_shader( "res/shaders/Complex.shader" ),
 		m_texture( "res/textures/phone.png" ),
 		m_renderer(),
-		m_proj( glm::ortho( 0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f ) ),
+		m_proj( glm::ortho( 0.0f, 1024.0f, 0.0f, 768.0f, -1.0f, 1.0f ) ),
 		m_view( glm::translate( glm::mat4( 1.0f ), glm::vec3( 0, 0, 0 ) ) ),
 		m_translationA( 200, 200, 0 ),
 		m_translationB( 400, 200, 0 )
@@ -75,7 +75,7 @@ namespace test
 	void TestMultipleObjects::OnImGuiRender()
 	{
 		ImGui::ColorEdit4( "Clear Color", m_ClearColor );
-		ImGui::SliderFloat3( "TranslationA", &m_translationA.x, 0.0f, 960.0f );
-		ImGui::SliderFloat3( "TranslationB", &m_translationB.x, 0.0f, 960.0f );
+		ImGui::SliderFloat3( "TranslationA", &m_translationA.x, 0.0f, 768.0f );
+		ImGui::SliderFloat3( "TranslationB", &m_translationB.x, 0.0f, 768.0f );
 	}
 };

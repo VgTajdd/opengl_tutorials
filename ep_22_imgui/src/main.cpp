@@ -84,7 +84,7 @@ int main( void )
 		VertexBuffer vb( positions, 4 * 4 * sizeof( float ) );	// Create buffer and copy data.
 		IndexBuffer ib( indices, 6 );							// Create index buffer.
 
-		glm::mat4 proj = glm::ortho( 0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f );
+		glm::mat4 proj = glm::ortho( 0.0f, 1024.0f, 0.0f, 768.0f, -1.0f, 1.0f );
 
 		glm::mat4 ident = glm::mat4( 1.0f );
 		glm::vec3 trvec = glm::vec3( -100, 0, 0 );

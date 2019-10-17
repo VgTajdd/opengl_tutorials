@@ -44,6 +44,8 @@ namespace test
 	{
 		m_va.Unbind();
 		m_shader.Unbind();
+		m_vb.Unbind();
+		m_ib.Unbind();
 	}
 
 	void TestMultipleObjects::OnUpdate(float deltaTime)

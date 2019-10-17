@@ -24,6 +24,8 @@ namespace test
 	TestTriangle::~TestTriangle()
 	{
 		m_shader.Unbind();
+		m_va.Unbind();
+		m_vb.Unbind();
 	}
 
 	void TestTriangle::OnUpdate( float deltaTime )

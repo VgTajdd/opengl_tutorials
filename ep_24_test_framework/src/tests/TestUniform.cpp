@@ -18,7 +18,7 @@ namespace test
 			0, 1, 2,
 			2, 3, 0
 		},
-		m_Step( 0.05 ),
+		m_Step( 0.05f ),
 		m_Direction( 1 ),
 		m_Oscillate( false ),
 		m_va(),
@@ -36,6 +36,8 @@ namespace test
 	{
 		m_va.Unbind();
 		m_shader.Unbind();
+		m_vb.Unbind();
+		m_ib.Unbind();
 	}
 
 	void TestUniform::OnUpdate( float deltaTime )

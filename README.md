@@ -1,4 +1,4 @@
 # OpenGL Tutorials
 
-This tutorials were made using the code is shown in the playlist of OpengGL tutorials of TheCherno in Youtube (support him on patron!).
-The projects was developed in Visual Studio 2017 community
+This tutorials were made using the code that is shown in the TheCherno OpengGL playlist in Youtube (support him on Patreon!).
+The projects was developed in Visual Studio 2017 community.

@@ -28,9 +28,6 @@ namespace test
 		m_vb.Unbind();
 	}
 
-	void TestTriangle::OnUpdate( float deltaTime )
-	{ }
-
 	void TestTriangle::OnRender()
 	{
 		GLCall( glClear( GL_COLOR_BUFFER_BIT ) );

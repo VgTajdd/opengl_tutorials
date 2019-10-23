@@ -48,10 +48,6 @@ namespace test
 		m_ib.Unbind();
 	}
 
-	void TestMultipleObjects::OnUpdate(float deltaTime)
-	{
-	}
-
 	void TestMultipleObjects::OnRender()
 	{
 		m_renderer.Clear();

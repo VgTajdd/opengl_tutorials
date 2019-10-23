@@ -20,7 +20,6 @@ namespace test
 		TestMultipleObjects();
 		~TestMultipleObjects();
 
-		void OnUpdate( float deltaTime ) override;
 		void OnRender() override;
 		void OnImGuiRender() override;
 
@@ -42,7 +41,6 @@ namespace test
 		// MVP members.
 		glm::mat4 m_proj;
 		glm::mat4 m_view;
-		// model and mvp will be created per object per draw
 
 		// Translation members.
 		glm::vec3 m_translationA;
